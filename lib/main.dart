@@ -41,7 +41,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    start = DateTime(2023, 9, 1);
+    DateTime now = DateTime.now();
+    start = DateTime(now.year, now.month, 1);
     end = DateTime(start.year, start.month + 1, start.day);
     futureGameReleases = fetchReleaseGames([], start, end);
   }
