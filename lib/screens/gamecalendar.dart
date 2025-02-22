@@ -13,7 +13,7 @@ class GameCalendar extends StatefulWidget {
 }
 
 class _GameCalendarState extends State<GameCalendar> {
-  var platforms = <Platform>[];
+  var platforms = <Platform>[Platform.ps5];
   late Future<List<GameRelease>> futureGameReleases;
   late DateTime start;
   late DateTime end;
@@ -28,7 +28,7 @@ class _GameCalendarState extends State<GameCalendar> {
     } else {
       end = DateTime(now.year, now.month + 1, 1);
     }
-    futureGameReleases = fetchReleaseGames([], start, end);
+    futureGameReleases = fetchReleaseGames(platforms, start, end);
   }
 
   void _togglePlatform(Platform platform) {
@@ -85,31 +85,33 @@ class _GameCalendarState extends State<GameCalendar> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Column(
-        children: [
-          PlatformSelection(
-            platforms: platforms,
-            myVoidCallback: _togglePlatform,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              GestureDetector(
-                onTap: _pickStartDate,
-                child: Text(
-                  'Start Date: ${DateFormat('dd/MM/yyyy').format(start)}',
+      body: GameReleaseList(futureGameReleases: futureGameReleases),
+      drawer: Card(
+        child: Column(
+          children: [
+            PlatformSelection(
+              platforms: platforms,
+              myVoidCallback: _togglePlatform,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  onTap: _pickStartDate,
+                  child: Text(
+                    'Start Date: ${DateFormat('dd/MM/yyyy').format(start)}',
+                  ),
                 ),
-              ),
-              GestureDetector(
-                onTap: _pickEndDate,
-                child: Text(
-                  'End Date: ${DateFormat('dd/MM/yyyy').format(end)}',
+                GestureDetector(
+                  onTap: _pickEndDate,
+                  child: Text(
+                    'End Date: ${DateFormat('dd/MM/yyyy').format(end)}',
+                  ),
                 ),
-              ),
-            ],
-          ),
-          GameReleaseList(futureGameReleases: futureGameReleases),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
