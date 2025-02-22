@@ -198,12 +198,10 @@ class _GameReleaseListState extends State<GameReleaseList> {
             return const Center(child: Text('No releases'));
           }
 
-          return Expanded(
-            child: ListView(
-              children: [
-                for (var item in snapshot.data!) GameReleaseWidget(item: item),
-              ],
-            ),
+          return ListView(
+            children: [
+              for (var item in snapshot.data!) GameReleaseWidget(item: item),
+            ],
           );
         } else if (snapshot.hasError) {
           return Text(
