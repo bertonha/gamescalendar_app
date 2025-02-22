@@ -15,20 +15,20 @@ class GameCalendar extends StatefulWidget {
 class _GameCalendarState extends State<GameCalendar> {
   var platforms = <Platform>[Platform.ps5];
   late Future<List<GameRelease>> futureGameReleases;
-  late DateTime start;
-  late DateTime end;
+  late DateTime startDate;
+  late DateTime endDate;
 
   @override
   void initState() {
     super.initState();
     DateTime now = DateTime.now();
-    start = DateTime(now.year, now.month, 1);
-    if (start.month == 12) {
-      end = DateTime(now.year + 1, 1, 1);
+    startDate = DateTime(now.year, now.month, 1);
+    if (startDate.month == 12) {
+      endDate = DateTime(now.year + 1, 1, 1);
     } else {
-      end = DateTime(now.year, now.month + 1, 1);
+      endDate = DateTime(now.year, now.month + 1, 1);
     }
-    futureGameReleases = fetchReleaseGames(platforms, start, end);
+    futureGameReleases = fetchReleaseGames(platforms, startDate, endDate);
   }
 
   void _togglePlatform(Platform platform) {
@@ -39,28 +39,31 @@ class _GameCalendarState extends State<GameCalendar> {
         platforms.add(platform);
       }
 
-      futureGameReleases = fetchReleaseGames(platforms, start, end);
+      futureGameReleases = fetchReleaseGames(platforms, startDate, endDate);
     });
   }
 
   void _setDataRange(DateTime newStart, DateTime newEnd) {
+    if (newStart.isAfter(newEnd)) {
+      newEnd = newStart.add(const Duration(days: 1));
+    }
     setState(() {
-      start = newStart;
-      end = newEnd;
+      startDate = newStart;
+      endDate = newEnd;
 
-      futureGameReleases = fetchReleaseGames(platforms, start, end);
+      futureGameReleases = fetchReleaseGames(platforms, startDate, endDate);
     });
   }
 
   void _pickStartDate() {
     showDatePicker(
       context: context,
-      initialDate: start,
+      initialDate: startDate,
       firstDate: DateTime(2020),
       lastDate: DateTime(2030),
     ).then((value) {
       if (value != null) {
-        _setDataRange(value, end);
+        _setDataRange(value, endDate);
       }
     });
   }
@@ -68,47 +71,45 @@ class _GameCalendarState extends State<GameCalendar> {
   void _pickEndDate() {
     showDatePicker(
       context: context,
-      initialDate: end,
+      initialDate: endDate,
       firstDate: DateTime(2020),
       lastDate: DateTime(2030),
     ).then((value) {
       if (value != null) {
-        _setDataRange(start, value);
+        _setDataRange(startDate, value);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    var dateFormat = DateFormat('dd/MM/yyyy');
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
       body: GameReleaseList(futureGameReleases: futureGameReleases),
-      drawer: Card(
-        child: Column(
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
           children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(color: Colors.blue),
+              child: Text('Filters'),
+            ),
             PlatformSelection(
               platforms: platforms,
               myVoidCallback: _togglePlatform,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  onTap: _pickStartDate,
-                  child: Text(
-                    'Start Date: ${DateFormat('dd/MM/yyyy').format(start)}',
-                  ),
-                ),
-                GestureDetector(
-                  onTap: _pickEndDate,
-                  child: Text(
-                    'End Date: ${DateFormat('dd/MM/yyyy').format(end)}',
-                  ),
-                ),
-              ],
+            ListTile(
+              title: Text('Start Date: ${dateFormat.format(startDate)}'),
+              onTap: _pickStartDate,
+            ),
+            ListTile(
+              title: Text('End Date: ${dateFormat.format(endDate)}'),
+              onTap: _pickEndDate,
             ),
           ],
         ),
@@ -156,7 +157,7 @@ class GameReleaseList extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data!.isEmpty) {
-            return const Text('No data');
+            return const Center(child: Text('No releases'));
           }
 
           return Expanded(
@@ -174,7 +175,7 @@ class GameReleaseList extends StatelessWidget {
         }
 
         // By default, show a loading spinner.
-        return const CircularProgressIndicator();
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }
