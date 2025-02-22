@@ -15,19 +15,16 @@ class Game {
   final String name;
   final String cover;
 
-  const Game({
-    required this.id,
-    required this.name,
-    required this.cover,
-  });
+  const Game({required this.id, required this.name, required this.cover});
 
   factory Game.fromJson(Map<String, dynamic> json) {
+    final coverUrl = json.containsKey("cover")
+        ? json['cover']['url'].replaceFirst("//", "https://")
+        : "";
     return Game(
       id: json['id'],
       name: json['name'],
-      cover: json.containsKey("cover")
-          ? json['cover']['url'].replaceFirst("//", "https://")
-          : "",
+      cover: coverUrl,
     );
   }
 }
