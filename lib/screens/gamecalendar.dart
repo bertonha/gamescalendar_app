@@ -143,8 +143,8 @@ class PlatformSelection extends StatelessWidget {
   }
 }
 
-class GameReleaseList extends StatefulWidget {
-  GameReleaseList({
+class GameReleaseList extends StatelessWidget {
+  const GameReleaseList({
     super.key,
     required this.platforms,
     required this.startDate,
@@ -156,42 +156,9 @@ class GameReleaseList extends StatefulWidget {
   final DateTime endDate;
 
   @override
-  State<GameReleaseList> createState() => _GameReleaseListState();
-}
-
-class _GameReleaseListState extends State<GameReleaseList> {
-  late Future<List<GameRelease>> futureGameReleases;
-
-  @override
-  void initState() {
-    super.initState();
-    futureGameReleases = fetchReleaseGames(
-      widget.platforms,
-      widget.startDate,
-      widget.endDate,
-    );
-  }
-
-  @override
-  void didUpdateWidget(GameReleaseList oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.platforms != oldWidget.platforms ||
-        widget.startDate != oldWidget.startDate ||
-        widget.endDate != oldWidget.endDate) {
-      setState(() {
-        futureGameReleases = fetchReleaseGames(
-          widget.platforms,
-          widget.startDate,
-          widget.endDate,
-        );
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<GameRelease>>(
-      future: futureGameReleases,
+      future: fetchReleaseGames(platforms, startDate, endDate),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data!.isEmpty) {
