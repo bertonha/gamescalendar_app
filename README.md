@@ -1,4 +1,4 @@
-# gamescalendar_app
+# gamescalendar
 
 A new Flutter project.
 

@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "gamescalendar_app",
+            "name": "gamescalendar",
             "request": "launch",
             "type": "dart",
             "flutterMode": "debug",
@@ -14,7 +14,7 @@
             ]
         },
         {
-            "name": "gamescalendar_app (profile mode)",
+            "name": "gamescalendar (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile",
@@ -23,7 +23,7 @@
             ]
         },
         {
-            "name": "gamescalendar_app (release mode)",
+            "name": "gamescalendar (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release",

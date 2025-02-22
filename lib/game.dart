@@ -1,8 +1,7 @@
 enum Platform {
   pc(6, 'PC', 'PC'),
-  ps4(48, 'PlayStation 4', 'PS4'),
-  ps5(167, 'PlayStation 5', 'PS5'),
-  nintendoSwitch(130, 'Nintendo Switch', 'Switch');
+  ps5(167, 'PS5', 'PS5'),
+  nintendoSwitch(130, 'Switch', 'Switch');
 
   final int id;
   final String desc;
