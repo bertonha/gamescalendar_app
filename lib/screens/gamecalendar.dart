@@ -132,7 +132,7 @@ class PlatformSelection extends StatelessWidget {
       children: [
         for (var item in Platform.values)
           CheckboxListTile(
-            title: Text(item.desc),
+            title: Text(item.name),
             value: platforms.contains(item),
             onChanged: (bool? value) {
               myVoidCallback(item);
@@ -213,7 +213,7 @@ class GameReleaseWidget extends StatelessWidget {
               ],
             ),
           ),
-          Text(item.platform.abreviation),
+          Text(item.platform.name),
         ],
       ),
     );

@@ -1,13 +1,12 @@
 enum Platform {
-  pc(6, 'PC', 'PC'),
-  ps5(167, 'PS5', 'PS5'),
-  nintendoSwitch(130, 'Switch', 'Switch');
+  pc(6, 'PC'),
+  ps5(167, 'PS5'),
+  nintendoSwitch(130, 'Switch');
 
   final int id;
-  final String desc;
-  final String abreviation;
+  final String name;
 
-  const Platform(this.id, this.desc, this.abreviation);
+  const Platform(this.id, this.name);
 }
 
 class Game {
@@ -18,14 +17,11 @@ class Game {
   const Game({required this.id, required this.name, required this.cover});
 
   factory Game.fromJson(Map<String, dynamic> json) {
-    final coverUrl = json.containsKey("cover")
-        ? json['cover']['url'].replaceFirst("//", "https://")
-        : "";
-    return Game(
-      id: json['id'],
-      name: json['name'],
-      cover: coverUrl,
-    );
+    final coverUrl =
+        json.containsKey("cover")
+            ? json['cover']['url'].replaceFirst("//", "https://")
+            : "";
+    return Game(id: json['id'], name: json['name'], cover: coverUrl);
   }
 }
 
